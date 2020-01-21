@@ -16,9 +16,9 @@
                         <div class="form-group">
                             <label>Tipo</label>
                             <select class="form-control" id="tipo" name="tipo" onchange="cambiaTipo()">
-                                <option value="1">Personal</option>
-                                <option value="0">Supervisor</option>
-
+                                <option value="0" >Personal</option>
+                                <option value="1" >Administrativo</option>
+                                <option value="2" >Supervisor</option>
                             </select>
                         </div>
                         <div id="supervisor-auth">
@@ -44,7 +44,7 @@
     <script>
         function cambiaTipo() {
             var tipo = $("#tipo").val();
-            if(tipo == 1){
+            if(tipo == 0){
                 $("#supervisor-auth").css("display","none")
             }else{
                 $("#supervisor-auth").css("display","block")

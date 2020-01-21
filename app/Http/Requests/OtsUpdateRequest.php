@@ -25,7 +25,7 @@ class OtsUpdateRequest extends FormRequest
     {
         return [
             'nro_orden' => "required",
-            'producto_fabricar' => "required",
+//            'producto_fabricar' => "required",
             'cliente' => "required",
         ];
     }

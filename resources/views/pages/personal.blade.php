@@ -5,7 +5,8 @@
         <div class="col-12 col-md-4">
             <form>
                 <div class="form-group form-inline">
-                    <input type="text" class="form-control form-control-sm" placeholder="Buscar" name="buscar" value="{{request('buscar')}}">
+                    <input type="text" class="form-control form-control-sm" placeholder="Buscar" name="buscar"
+                           value="{{request('buscar')}}">
                     <button type="submit" class="btn btn-primary btn-sm mx-1">Buscar</button>
                 </div>
             </form>
@@ -34,7 +35,16 @@
                 <td>{{$i->id}}</td>
                 <td>{{$i->nombre}}</td>
                 <td>{{$i->doc_ide}}</td>
-                <td>{{$i->tipo == 0 ? 'Supervisor':'Personal'}}</td>
+                <td>
+                    @if($i->tipo == 0)
+                        Personal
+                    @elseif($i->tipo == 1)
+                        Administrativo
+                    @elseif($i->tipo == 2)
+                        Supervisor
+                    @endif
+
+                </td>
                 <td>
 
                     <a href="{{route('admin.personal.edit',$i->id)}}" class="btn btn-success btn-sm">Editar</a>

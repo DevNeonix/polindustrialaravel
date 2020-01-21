@@ -387,7 +387,7 @@
         <span>Cerrar</span>
     </a>
     <div class="logo">
-        Admin Polindustria | <?php
+        Admin  | <?php
         $id = Session::get('usuario');
         $user = DB::table('personal')->where('id', $id)->get()[0];
         echo $user->nombre;
@@ -397,12 +397,18 @@
 </div>
 <div class="sidebar">
     <ul>
-        <li><a href="{{route('admin.personal')}}"><i class="fa fa-users"></i><span>Personal</span></a></li>
-        <li><a href="{{route('admin.ots')}}"><i class="fa fa-server"></i><span>Ots</span></a></li>
-        <li><a href="{{route('admin.ots_personal')}}"><i class="fa fa-dashboard"></i><span>Personal por Ots</span></a>
-        </li>
-        <li><a href="{{route('admin.marcacion')}}"><i
-                        class="fa fa-calendar"></i><span>Marcación de personal</span></a></li>
+
+        @if($user->tipo == 1)
+            <li><a href="{{route('admin.personal')}}"><i class="fa fa-users"></i><span>Personal</span></a></li>
+            <li><a href="{{route('admin.ots')}}"><i class="fa fa-server"></i><span>Ots</span></a></li>
+            <li><a href="{{route('admin.ots_personal')}}"><i
+                            class="fa fa-dashboard"></i><span>Personal por Ots</span></a>
+            </li>
+        @endif
+        @if($user->tipo == 1 || $user->tipo == 2)
+            <li><a href="{{route('admin.marcacion')}}"><i
+                            class="fa fa-calendar"></i><span>Marcación de personal</span></a></li>
+        @endif
         <li><a><i class="fa fa-close"></i><span>Cerrar Sesión </span></a></li>
     </ul>
 </div>
@@ -415,8 +421,9 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+<script
+        src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"

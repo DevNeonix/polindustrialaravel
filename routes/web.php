@@ -192,4 +192,17 @@ Route::group(['prefix' => 'admin'], function () {
         $ot = DB::table('orden_trabajo')->where("id", $id)->get()[0];
         return view('pages.marcacion_registro')->with('ot', $ot);
     })->name('admin.marcacion.registro');
+
+    Route::post('marcacion/registro', function (Request $request) {
+        $personal = $request->input('personal');
+        $orden_trabajo = $request->input('orden_trabajo');
+        DB::table('marcacion')->insert([
+            "personal" => $personal,
+            "orden_trabajo" => $orden_trabajo,
+            "fecha" => \Carbon\Carbon::now(),
+            "usuario_registra" => Session::get("usuario"),
+        ]);
+        return response()->json(["message" => "Marcación registrada correctamente"]);
+    })->name('admin.marcacion.insert');
+
 });
