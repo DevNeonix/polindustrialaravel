@@ -9,10 +9,10 @@
                             <label>Nro Orden</label>
                             <input type="text" class="form-control" name="nro_orden" value="{{old('nro_orden')}}">
                         </div>
-{{--                        <div class="form-group">--}}
-{{--                            <label>Producto a Fabricar</label>--}}
-{{--                            <input type="text" class="form-control" name="producto_fabricar" value="{{old('producto_fabricar')}}">--}}
-{{--                        </div>--}}
+                        <div class="form-group">
+                            <label>Producto a Fabricar</label>
+                            <input type="text" class="form-control" name="producto_fabricar" value="{{old('producto_fabricar')}}">
+                        </div>
                         <div class="form-group">
                             <label>Cliente</label>
                             <input type="text" class="form-control" name="cliente" value="{{old('cliente')}}">

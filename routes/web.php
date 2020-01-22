@@ -138,11 +138,12 @@ Route::group(['prefix' => 'admin'], function () {
         $nro_orden = $request->input('nro_orden');
         $producto_fabricar = $request->input('producto_fabricar');
         $cliente = $request->input('cliente');
+        $estado = $request->input('estado');
         $id = DB::table('orden_trabajo')->where('id', $id)->update([
             'nro_orden' => $nro_orden,
             'producto_fabricar' => $producto_fabricar,
             'cliente' => $cliente,
-            'estado' => '1'
+            'estado' => $estado
         ], 'id');
         return redirect()->route('admin.ots')->with('success', "La OT ha sido modificado correctamente.");
     })->name('admin.ots.update');
@@ -196,12 +197,17 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('marcacion/registro', function (Request $request) {
         $personal = $request->input('personal');
         $orden_trabajo = $request->input('orden_trabajo');
-        DB::table('marcacion')->insert([
-            "personal" => $personal,
-            "orden_trabajo" => $orden_trabajo,
-            "fecha" => \Carbon\Carbon::now(),
-            "usuario_registra" => Session::get("usuario"),
-        ]);
+        if (!empty($personal)) {
+            foreach ($personal as $personal_item) {
+                DB::table('marcacion')->insert([
+                    "personal" => $personal_item,
+                    "orden_trabajo" => $orden_trabajo,
+                    "fecha" => \Carbon\Carbon::now(),
+                    "usuario_registra" => Session::get("usuario"),
+                ]);
+            }
+        }
+
         return response()->json(["message" => "Marcación registrada correctamente"]);
     })->name('admin.marcacion.insert');
 
