@@ -20,7 +20,7 @@ Route::get('/', function () {
 });
 Route::get('login', function () {
     return view('pages.login');
-});
+})->name('login');
 Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
     $usuario = $request->input('usuario');
     $clave = $request->input('clave');
@@ -34,7 +34,10 @@ Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
 })->name('loginsubmit');
 
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
+    Route::get('close', function () {
+        Session::flush();
+    })->name('admin.close');
 
 
     Route::get('home', function () {
