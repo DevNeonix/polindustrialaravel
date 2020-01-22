@@ -33,7 +33,7 @@
                 <td>{{$i->nro_orden}}</td>
                 <td>{{$i->producto_fabricar}}</td>
                 <td>{{$i->cliente}}</td>
-                <td>{{$i->estado == 1 ? 'Activo':'Finalizdo'}}</td>
+                <td>{{$i->estado == 1 ? 'Activo':'Finalizado'}}</td>
                 <td>
 
                     <a href="{{route('admin.ots.edit',$i->id)}}" class="btn btn-success btn-sm">Editar</a>
