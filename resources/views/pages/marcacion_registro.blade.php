@@ -11,18 +11,28 @@
         $empleados = DB::table('view_orden_trabajo_personal')->where('id_ot', $ot->id)->get();
 
         ?>
-        <table class="table">
+        <table class="table table-responsive">
             <thead>
             <tr>
-                <th style="width: 10px"><input type="checkbox" id="allChk" onclick="seleccionaTodos(this.checked)"></th>
+                <th><input type="checkbox" id="allChk" onclick="seleccionaTodos(this.checked)"></th>
                 <th>Nombre</th>
             </tr>
             </thead>
             <tbody>
             @foreach($empleados as $i)
                 <tr>
-                    <td style="width: 10px">
-                        <input id_personal="{{$i->id_personal}}" class="chkAsistencia" type="checkbox">
+                    <td>
+                        <?php
+
+                        $validasql = DB::select(DB::raw("select mod(count(*),2) as valida  from marcacion where personal=" . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) and orden_trabajo <> '" . $ot->id . "' "));
+                        $v = intval($validasql[0]->valida);
+                        ?>
+                            @if($v == 0)
+
+                            <input id_personal="{{$i->id_personal}}" class="chkAsistencia" type="checkbox">
+
+                            @endif
+
                     </td>
                     <?php
                     $k = 0
@@ -30,7 +40,7 @@
                     <td>
                         {{$i->nombre}}
                         <?php
-                        $x = DB::select(DB::raw("select * from marcacion where personal = " . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) "));
+                        $x = DB::select(DB::raw("select * from marcacion where orden_trabajo='" . $ot->id . "' and personal = " . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) "));
                         ?>
                         @foreach($x as $j)
                             <p class="text-muted text-italic">
@@ -38,8 +48,11 @@
                                 <?php
                                 $k = $k + 1;
                                 ?>
-                                <b>{{$k%2==0?"Salió":'Ingresó' }}</b>: {{\Carbon\Carbon::parse($j->fecha)->diffForHumans(\Carbon\Carbon::now())}}</p>
+                                <b>{{$k%2==0?"Salió":'Ingresó' }}</b>: {{\Carbon\Carbon::parse($j->fecha)->diffForHumans(\Carbon\Carbon::now())}}
+                            </p>
                         @endforeach
+
+                        @if($v == 1)<br> <p class="text-danger">Este personal se encuentra en otra OT</p> @endif
                     </td>
 
                 </tr>
