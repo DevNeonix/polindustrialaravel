@@ -29,7 +29,7 @@ Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
         return redirect()->to('login')->withErrors('Las creedenciales no corresponden con nuestros registros.');
     } else {
         Session::put('usuario', $user->get()[0]->id . '');
-        return redirect()->to(route('admin.home'));
+        return redirect()->to(route('admin.marcacion'));
     }
 })->name('loginsubmit');
 
@@ -37,6 +37,7 @@ Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
 Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::get('close', function () {
         Session::flush();
+        return redirect()->to(route('login'));
     })->name('admin.close');
 
 
