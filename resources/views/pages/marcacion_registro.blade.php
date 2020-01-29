@@ -20,6 +20,11 @@
             </thead>
             <tbody>
             @foreach($empleados as $i)
+                <?php
+                $faltas = DB::table('faltas')->where('ot', $ot->id)->where('personal', $i->id_personal)->where('fecha', date("Y-m-d"))->get();
+
+                ?>
+                @if(count($faltas) == 0)
                 <tr>
                     <td>
                         <?php
@@ -27,11 +32,11 @@
                         $validasql = DB::select(DB::raw("select mod(count(*),2) as valida  from marcacion where personal=" . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) and orden_trabajo <> '" . $ot->id . "' "));
                         $v = intval($validasql[0]->valida);
                         ?>
-                            @if($v == 0)
+                        @if($v == 0)
 
                             <input id_personal="{{$i->id_personal}}" class="chkAsistencia" type="checkbox">
 
-                            @endif
+                        @endif
 
                     </td>
                     <?php
@@ -49,6 +54,10 @@
                                 $k = $k + 1;
                                 ?>
                                 <b>{{$k%2==0?"Salió":'Ingresó' }}</b>: {{\Carbon\Carbon::parse($j->fecha)->diffForHumans(\Carbon\Carbon::now())}}
+                                @if($j->id == $x[count($x)-1]->id)
+                                    <button class="btn btn-danger btn-sm" onclick="eliminaMarca({{$j->id}})">Eliminar
+                                    </button>
+                                @endif
                             </p>
                         @endforeach
 
@@ -56,8 +65,10 @@
                     </td>
 
                 </tr>
-            </tbody>
+                @endif
+
             @endforeach
+            </tbody>
             <tr>
                 <td colspan="2">
                     <button class="btn btn-primary" onclick="enviarRegistro()">Registrar asistencia</button>
@@ -72,6 +83,25 @@
 
         function seleccionaTodos(v) {
             $('.chkAsistencia').prop('checked', v);
+        }
+
+        function eliminaMarca(id) {
+            if (confirm("¿Está seguro de eliminar este registro?")) {
+
+
+                $.ajax({
+                    url: '{{route("admin.marcacion.delete")}}',
+                    type: 'delete',
+                    data: {
+                        id: id
+                    },
+                    cache: false,
+                    success: function (res) {
+                        alert(res.message);
+                        window.location.reload();
+                    }
+                });
+            }
         }
 
         function enviarRegistro() {

@@ -183,7 +183,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     })->name('admin.ots_personal.delete');
 
     Route::get('marcacion', function (Request $request) {
-        $data = DB::table('orden_trabajo');
+        $data = DB::table('orden_trabajo')->where('estado', '1');
         if (!empty($request->input('buscar'))) {
             $data = $data->where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
             $data = $data->orWhere('cliente', 'like', '%' . $request->input('buscar') . '%');
@@ -214,5 +214,36 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
         return response()->json(["message" => "Marcación registrada correctamente"]);
     })->name('admin.marcacion.insert');
+    Route::delete('marcacion/registro', function (Request $request) {
+        $id = $request->input('id');
+
+        DB::table('marcacion')->where('id', $id)->delete();
+
+        return response()->json(["message" => "Marcación eliminada correctamente"]);
+    })->name('admin.marcacion.delete');
+
+
+    Route::get('marcacion/faltas/{id}', function ($id, Request $request) {
+        $ot = DB::table('orden_trabajo')->where("id", $id)->get()[0];
+        return view('pages.marcacion_faltas')->with('ot', $ot);
+
+    })->name('admin.marcacion.faltas');
+
+    Route::get('marcacion/faltas', function (Request $request) {
+        $ot = $request->input('ot');
+        $personal = $request->input('personal');
+        $desde = $request->input('desde');
+        $hasta = $request->input('hasta');
+        for ($i = $desde; $i <= $hasta; $i = date("Y-m-d", strtotime($i . "+ 1 days"))) {
+
+            DB::table('faltas')->insert([
+                'ot' => $ot,
+                'personal' => $personal,
+                'fecha' => $i,
+            ]);
+
+        }
+        return redirect()->back();
+    })->name('admin.marcacion.faltas.registro');
 
 });

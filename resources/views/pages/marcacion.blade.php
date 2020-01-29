@@ -32,10 +32,13 @@
                 <td>{{$i->producto_fabricar}}</td>
                 <td>{{$i->cliente}}</td>
                 <td>{{$i->estado == 1 ? 'Activo':'Finalizado'}}</td>
-                <td>
+                <td class="">
 
-                    <a href="{{route('admin.marcacion.registro',$i->id)}}" class="btn btn-success btn-sm">Registrar
+                    <a href="{{route('admin.marcacion.registro',$i->id)}}" class="btn btn-success btn-sm m-2">Registrar
                         Marcas</a>
+
+                    <a class="btn btn-sm btn-danger text-white m-2" href="{{route('admin.marcacion.faltas',$i->id)}}">Registrar
+                        Faltas</a>
 
                 </td>
             </tr>
