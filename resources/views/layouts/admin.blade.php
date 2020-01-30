@@ -403,6 +403,9 @@
             <li><a href="{{route('admin.ots_personal')}}"><i
                             class="fa fa-dashboard"></i><span>Personal por Ots</span></a>
             </li>
+            <li><a href="{{route('admin.ots_personal')}}"><i
+                            class="fa fa-list"></i><span>Reporte de asistencia</span></a>
+            </li>
         @endif
         @if($user->tipo == 1 || $user->tipo == 2)
             <li><a href="{{route('admin.marcacion')}}"><i
