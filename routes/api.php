@@ -41,7 +41,7 @@ Route::get('ots_personal', function (Request $request) {
 Route::get('personal_ots', function (Request $request) {
     $dni = $request->input("dni");
     $exec = DB::table("view_orden_trabajo_personal")->where('doc_ide','=',$dni)->get();
-    return response()->json(apiResponse($exec, "Listado de Ots de " + $dni), 200, [], 256);
+    return response()->json($exec, 200, [], 256);
 })->name('admin.personal_ots');
 
 Route::get('ots_personal_disponible', function (Request $request) {
