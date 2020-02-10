@@ -97,9 +97,9 @@
             hora.innerHTML = h + ':' + m + ':' + s;
             setInterval(function () {
                 var today = new Date();
-                var h = "00"+today.getHours();
-                var m = "00"+today.getMinutes();
-                var s = "00"+today.getSeconds();
+                var h = "00" + today.getHours();
+                var m = "00" + today.getMinutes();
+                var s = "00" + today.getSeconds();
 
                 hora.innerHTML = h.toString().slice(-2) + ':' + m.toString().slice(-2) + ':' + s.toString().slice(-2);
             }, 1000);

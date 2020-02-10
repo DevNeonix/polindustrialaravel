@@ -21,6 +21,9 @@ Route::get('/', function () {
 Route::get('login', function () {
     return view('pages.login');
 })->name('login');
+
+
+
 Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
     $usuario = $request->input('usuario');
     $clave = $request->input('clave');

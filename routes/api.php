@@ -38,6 +38,35 @@ Route::get('ots_personal', function (Request $request) {
 })->name('admin.ots_personal');
 
 
+Route::get('ots_personal_disponible', function (Request $request) {
+    $data = array();
+    $ot = $request->input("ot");
+
+    $personal = DB::table('view_orden_trabajo_personal')->where('id_ot', $ot)->get();
+
+    foreach ($personal as $i) {
+        $validacion = DB::select(DB::raw("select mod(count(*),2) as valida  from marcacion where personal=" . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) and orden_trabajo <> '" . $ot . "' "));
+
+
+        if ($validacion[0]->valida == 0) {
+            $ingresos = DB::select(DB::raw("select * from marcacion where orden_trabajo='" . $ot . "' and personal = " . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) "));
+            $arrIngresos = array();
+//            foreach ($ingresos as $ing){
+//                array_push()
+//            }
+            $i->ingresos = $ingresos;
+
+            array_push($data, $i);
+        }
+
+
+    }
+
+
+    return response()->json(apiResponse($data, "Listado de personal por OT"), 200, [], 256);
+})->name('admin.ots_personal');
+
+
 function apiResponse($data = [], $message = "")
 {
     return ["data" => $data, "message" => $message];
