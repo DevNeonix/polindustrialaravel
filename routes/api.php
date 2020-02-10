@@ -38,6 +38,13 @@ Route::get('ots_personal', function (Request $request) {
 })->name('admin.ots_personal');
 
 
+Route::get('personal_ots', function (Request $request) {
+    $dni = $request->input("dni");
+    $query = "select * from view_orden_trabajo_personal where doc_ide = '" . $dni . "'";
+    $exec = DB::select(DB::raw($query));
+    return response()->json(apiResponse($exec, "Listado de Ots de " + $dni), 200, [], 256);
+})->name('admin.ots_personal');
+
 Route::get('ots_personal_disponible', function (Request $request) {
     $data = array();
     $ot = $request->input("ot");
