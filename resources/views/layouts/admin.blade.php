@@ -403,7 +403,7 @@
             <li><a href="{{route('admin.ots_personal')}}"><i
                             class="fa fa-dashboard"></i><span>Personal por Ots</span></a>
             </li>
-            <li><a href="{{route('admin.ots_personal')}}"><i
+            <li><a href="{{route('admin.reporte.asistencia')}}"><i
                             class="fa fa-list"></i><span>Reporte de asistencia</span></a>
             </li>
         @endif
