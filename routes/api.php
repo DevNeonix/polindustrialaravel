@@ -72,6 +72,23 @@ Route::get('ots_personal_disponible', function (Request $request) {
     return response()->json(apiResponse($data, "Listado de personal por OT"), 200, [], 256);
 })->name('admin.ots_personal');
 
+Route::post('marcacion/registro', function (Request $request) {
+    $personal = $request->input('personal');
+    $orden_trabajo = $request->input('orden_trabajo');
+    $usr = $request->input('usr');
+    if (!empty($personal)) {
+        foreach ($personal as $personal_item) {
+            DB::table('marcacion')->insert([
+                "personal" => $personal_item,
+                "orden_trabajo" => $orden_trabajo,
+                "fecha" => \Carbon\Carbon::now(),
+                "usuario_registra" => $usr,
+            ]);
+        }
+    }
+
+    return response()->json(apiResponse([],"Asistencia registrada correctamente"));
+});
 
 function apiResponse($data = [], $message = "")
 {
