@@ -76,6 +76,11 @@ Route::get('marcacion/registro', function (Request $request) {
     $personal = $request->input('personal');
     $orden_trabajo = $request->input('orden_trabajo');
     $usr = $request->input('usr');
+    $validacion = DB::select(DB::raw("select mod(count(*),2) as valida  from marcacion where personal=" . $personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) and orden_trabajo <> '" . $orden_trabajo . "' "));
+
+
+    if ($validacion[0]->valida == 0) {
+
 
             DB::table('marcacion')->insert([
                 "personal" => $personal,
@@ -83,8 +88,11 @@ Route::get('marcacion/registro', function (Request $request) {
                 "fecha" => \Carbon\Carbon::now(),
                 "usuario_registra" => $usr,
             ]);
+        return response()->json(apiResponse([],"Asistencia registrada correctamente"));
+    }else{
+        return response()->json(apiResponse([],"No puede generarse la asistencia si esta en otra OT."));
+    }
 
-    return response()->json(apiResponse([],"Asistencia registrada correctamente"));
 });
 
 function apiResponse($data = [], $message = "")
