@@ -72,7 +72,7 @@ Route::get('ots_personal_disponible', function (Request $request) {
     return response()->json(apiResponse($data, "Listado de personal por OT"), 200, [], 256);
 })->name('admin.ots_personal');
 
-Route::post('marcacion/registro', function (Request $request) {
+Route::get('marcacion/registro', function (Request $request) {
     $personal = $request->input('personal');
     $orden_trabajo = $request->input('orden_trabajo');
     $usr = $request->input('usr');
