@@ -40,6 +40,10 @@ Route::get('ots_personal', function (Request $request) {
 
 Route::get('personal_ots', function (Request $request) {
     $dni = $request->input("dni");
+
+    if (empty( DB::table("PERSONAL")->where('doc_ide','=',$dni)->get())){
+        return response()->json(apiResponse([],"Upss no tenemos a este personal registrado"), 200, [], 256);
+    }
     $exec = DB::table("view_orden_trabajo_personal")->where('doc_ide','=',$dni)->get();
     return response()->json(apiResponse($exec), 200, [], 256);
 })->name('admin.personal_ots');
