@@ -13,6 +13,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
@@ -21,7 +22,6 @@ Route::get('/', function () {
 Route::get('login', function () {
     return view('pages.login');
 })->name('login');
-
 
 
 Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
@@ -248,5 +248,25 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         }
         return redirect()->back();
     })->name('admin.marcacion.faltas.registro');
+    Route::get('reportes/asistencia', function () {
+        #"SELECT * FROM `view_orden_trabajo_personal` as vp inner join marcacion on marcacion.personal=vp.id_personal and marcacion.orden_trabajo=vp.id_ot""
 
+        if (empty(\request("f1")) || empty(\request("f2"))) {
+            $f1 = date("Y-m-d");
+            $f2 = new DateTime('+1 day');
+        } else {
+            $f1 = \request("f1");
+            $f2 = new DateTime(\request("f2"));
+            $f2->modify('+1 day');
+
+        }
+
+
+        $asistencias = DB::table("view_orden_trabajo_personal")->join("marcacion", function ($join) {
+            $join->on("marcacion.personal", "=", "id_personal");
+            $join->on("marcacion.orden_trabajo", "=", "id_ot");
+        })->whereBetween("fecha", [$f1, $f2->format('Y-m-d')])->get();
+
+        return view('pages.reportes.asistencia')->with('data', $asistencias);
+    })->name("admin.reporte.asistencia");
 });
