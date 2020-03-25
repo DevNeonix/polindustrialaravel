@@ -6,8 +6,12 @@
                 <div class="card-body">
                     <form action="{{route('admin.personal.store')}}" method="post" >
                         <div class="form-group">
-                            <label>Nombre</label>
-                            <input type="text" class="form-control" name="nombre" value="{{old('nombre')}}">
+                            <label>Nombres</label>
+                            <input type="text" class="form-control" name="nombres" value="{{old('nombres')}}">
+                        </div>
+                        <div class="form-group">
+                            <label>Apellidos</label>
+                            <input type="text" class="form-control" name="apellidos" value="{{old('apellidos')}}">
                         </div>
                         <div class="form-group">
                             <label>Doc. Identidad</label>

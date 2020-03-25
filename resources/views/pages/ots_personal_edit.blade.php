@@ -16,7 +16,7 @@
                     <table>
                         @foreach($data as $i)
                             <tr>
-                                <td>{{$i->nombre}}</td>
+                                <td>{{$i->nombres}} {{$i->apellidos}}</td>
                                 <td>
                                     <form action="{{route('admin.ots_personal.delete')}}" method="get">
                                         <input type="hidden" name="personal" value="{{$i->id_personal}}">
@@ -37,7 +37,7 @@
 
                         @foreach($disponibles as $i)
                             <tr>
-                                <td>{{$i->nombre}}</td>
+                                <td>{{$i->nombres}} {{$i->apellidos}}</td>
                                 <td>
                                     <form action="{{route('admin.ots_personal.store')}}" method="get">
                                         <input type="hidden" name="personal" value="{{$i->id}}">

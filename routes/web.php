@@ -51,7 +51,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::get('personal', function (Request $request) {
         $data = DB::table('personal');
         if (!empty($request->input('buscar'))) {
-            $data = $data->where('nombre', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
         }
         $data = $data->paginate()->appends(request()->query());
 
@@ -64,14 +64,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
     Route::post('personal', function (\App\Http\Requests\PersonalStoreRequest $request) {
 
-        $nombre = $request->input('nombre');
+        $nombres = $request->input('nombres');
+        $apellidos = $request->input('apellidos');
         $doc_ide = $request->input('doc_ide');
         $tipo = $request->input('tipo');
         $usuario = $request->input('usuario');
         $clave = $request->input('clave');
 
         $id = DB::table('personal')->insertGetId([
-            'nombre' => $nombre,
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
             'doc_ide' => $doc_ide,
             'tipo' => $tipo,
             'usuario' => $usuario,
@@ -91,13 +93,15 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
     Route::post('personal/edit/{id}', function ($id, \App\Http\Requests\PersonalUpdateRequest $request) {
 
-        $nombre = $request->input('nombre');
+        $nombres = $request->input('nombres');
+        $apellidos = $request->input('apellidos');
         $doc_ide = $request->input('doc_ide');
         $tipo = $request->input('tipo');
         $usuario = $request->input('usuario');
         $clave = $request->input('clave');
         DB::table('personal')->where('id', $id)->update([
-            'nombre' => $nombre,
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
             'doc_ide' => $doc_ide,
             'tipo' => $tipo,
             'usuario' => $usuario,

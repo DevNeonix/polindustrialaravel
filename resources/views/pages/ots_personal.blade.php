@@ -43,7 +43,7 @@
                         ?>
 
                         @foreach($personal as $p)
-                            <li>{{$p->nombre}}</li>
+                            <li>{{$p->nombres }} {{$p->apellidos }}</li>
                         @endforeach
                     </ul>
                 </td>

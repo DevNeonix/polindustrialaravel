@@ -26,7 +26,7 @@
                     $k = 0
                     ?>
                     <td>
-                        {{$i->nombre}}
+                        {{$i->nombres}} {{$i->apellidos}}
                         <?php
                         $x = DB::select(DB::raw("select * from marcacion where orden_trabajo='" . $ot->id . "' and personal = " . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) "));
                         ?>

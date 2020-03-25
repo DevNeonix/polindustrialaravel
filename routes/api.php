@@ -25,7 +25,7 @@ Route::post('login', function (Request $request) {
         return response()->json(apiResponse([], "Usuario o contraseña errada"), 403, [], 256);
     } else {
 
-        return response()->json(apiResponse($user->get()[0], "Bienvenido " . $user->get()[0]->nombre), 200, [], 256);
+        return response()->json(apiResponse($user->get()[0], "Bienvenido " . $user->get()[0]->nombres), 200, [], 256);
     }
 });
 Route::get('ots', function () {
