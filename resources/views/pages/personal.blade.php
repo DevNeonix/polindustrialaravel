@@ -33,7 +33,7 @@
         @foreach($data as $i)
             <tr>
                 <td>{{$i->id}}</td>
-                <td>{{$i->nombres}} {{$i->apellidos}}</td>
+                <td>{{$i->apellidos}} {{$i->nombres}}</td>
                 <td>{{$i->doc_ide}}</td>
                 <td>
                     @if($i->tipo == 0)

@@ -53,7 +53,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         if (!empty($request->input('buscar'))) {
             $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
         }
-        $data = $data->paginate()->appends(request()->query());
+        $data = $data->orderBy('apellidos', 'desc')->paginate()->appends(request()->query());
 
         return view('pages.personal')->with('data', $data);
     })->name('admin.personal');
