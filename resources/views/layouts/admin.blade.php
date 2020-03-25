@@ -389,7 +389,7 @@
         Admin  | <?php
         $id = Session::get('usuario');
         $user = DB::table('personal')->where('id', $id)->get()[0];
-        echo $user->nombre;
+        echo $user->nombres." ".$user->apellidos;
         ?>
     </div>
 
