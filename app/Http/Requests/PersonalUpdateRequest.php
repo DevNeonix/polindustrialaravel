@@ -26,7 +26,7 @@ class PersonalUpdateRequest extends FormRequest
         return [
             'nombres' => 'required',
             'apellidos' => 'required',
-            'doc_ide' => ['required',\Illuminate\Validation\Rule::unique('personal')->ignore($this->user()->id)],
+
             'tipo' => 'required',
         ];
     }
