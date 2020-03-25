@@ -20,6 +20,7 @@
                         <div class="form-group">
                             <label>Tipo</label>
                             <select class="form-control" id="tipo" name="tipo" onchange="cambiaTipo()">
+                                <option value="-1" {{$personal->tipo == '-1'?'selected':''}}>Cesado</option>
                                 <option value="0" {{$personal->tipo == '0'?'selected':''}}>Personal</option>
                                 <option value="1" {{$personal->tipo == '1'?'selected':''}}>Administrativo</option>
                                 <option value="2" {{$personal->tipo == '2'?'selected':''}}>Supervisor</option>
