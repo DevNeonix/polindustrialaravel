@@ -24,7 +24,8 @@ class PersonalUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre' => 'required',
+            'nombres' => 'required',
+            'apellidos' => 'required',
             'doc_ide' => 'required',
             'tipo' => 'required',
         ];
