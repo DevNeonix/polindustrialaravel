@@ -52,6 +52,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         $data = DB::table('personal');
         if (!empty($request->input('buscar'))) {
             $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->orWhere('doc_ide', 'like', '%' . $request->input('buscar') . '%');
         }
         $data = $data->orderBy('apellidos', 'asc')->paginate()->appends(request()->query());
 
