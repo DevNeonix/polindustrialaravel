@@ -49,7 +49,7 @@
     <script>
         function cambiaTipo() {
             var tipo = $("#tipo").val();
-            if (tipo == 0) {
+            if (parseInt(tipo) == 0 || parseInt(tipo) == -1) {
                 $("#supervisor-auth").css("display", "none")
             } else {
                 $("#supervisor-auth").css("display", "block")
