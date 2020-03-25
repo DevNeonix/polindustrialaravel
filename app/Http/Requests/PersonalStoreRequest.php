@@ -26,7 +26,7 @@ class PersonalStoreRequest extends FormRequest
         return [
             'nombres' => 'required',
             'apellidos' => 'required',
-            'doc_ide' => 'required',
+            'doc_ide' => 'required|unique:personal',
             'tipo' => 'required',
         ];
     }
