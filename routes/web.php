@@ -51,7 +51,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::get('personal', function (Request $request) {
         $data = DB::table('personal');
         if (!empty($request->input('buscar'))) {
-            $data = $data->where('tipo',  '>',0);
+            $data = $data->where('tipo', '>', 0);
             $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
             $data = $data->orWhere('doc_ide', 'like', '%' . $request->input('buscar') . '%');
         }
@@ -252,7 +252,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
             ]);
 
         }
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'Falta registrada correctamente']);
     })->name('admin.marcacion.faltas.registro');
     Route::get('reportes/asistencia', function () {
         #"SELECT * FROM `view_orden_trabajo_personal` as vp inner join marcacion on marcacion.personal=vp.id_personal and marcacion.orden_trabajo=vp.id_ot""
