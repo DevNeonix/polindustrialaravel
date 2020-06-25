@@ -36,7 +36,9 @@
                 <td>{{$i->apellidos}} {{$i->nombres}}</td>
                 <td>{{$i->doc_ide}}</td>
                 <td>
-                    @if($i->tipo == 0)
+	 	    @if($i->tipo == -1)
+			Cesado
+                    @elseif($i->tipo == 0)
                         Personal
                     @elseif($i->tipo == 1)
                         Administrativo

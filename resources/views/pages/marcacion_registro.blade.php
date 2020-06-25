@@ -11,7 +11,7 @@
 
                 <?php
 
-                $empleados = DB::table('view_orden_trabajo_personal')->where('id_ot', $ot->id)->get();
+                $empleados = DB::table('view_orden_trabajo_personal')->where('id_ot', $ot->id)->where('tipo','>',-1)->get();
 
                 ?>
                 <table class="table table-responsive">

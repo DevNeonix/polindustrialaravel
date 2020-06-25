@@ -51,8 +51,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::get('personal', function (Request $request) {
         $data = DB::table('personal');
         if (!empty($request->input('buscar'))) {
-            $data = $data->where('tipo', '>', 0);
+            //$data = $data->where('tipo', '>', 0);
+	    //SELECT * FROM `personal` WHERE nombres like '%mireya%'
             $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
+	    $data = $data->orWhere('apellidos','like','%'.$request->input('buscar').'%');
             $data = $data->orWhere('doc_ide', 'like', '%' . $request->input('buscar') . '%');
         }
         $data = $data->orderBy('apellidos', 'asc')->paginate()->appends(request()->query());
