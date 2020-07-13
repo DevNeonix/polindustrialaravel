@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 Route::post('login', function (Request $request) {
     $usuario = $request->input('usuario');
     $clave = $request->input('clave');
-    $user = DB::table('personal')->where('usuario', $usuario)->where('clave', $clave);
+    $user = DB::table('users')->where('email', $usuario)->where('password', $clave);
     if ($usuario == "" || $clave == "") {
         return response()->json(apiResponse([], "Usuario o contraseña errada"), 403, [], 256);
     }
@@ -25,7 +25,7 @@ Route::post('login', function (Request $request) {
         return response()->json(apiResponse([], "Usuario o contraseña errada"), 403, [], 256);
     } else {
 
-        return response()->json(apiResponse($user->get()[0], "Bienvenido " . $user->get()[0]->nombres), 200, [], 256);
+        return response()->json(apiResponse($user->get()[0], "Bienvenido " . $user->get()[0]->name), 200, [], 256);
     }
 });
 Route::get('ots', function () {
