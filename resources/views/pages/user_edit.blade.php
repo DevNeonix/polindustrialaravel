@@ -4,18 +4,18 @@
         <div class="col-12 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{route('admin.personal.update',$personal->id)}}" method="post">
+                    <form action="{{route('admin.user.update',$user->id)}}" method="post">
                         <div class="form-group">
-                            <label>Nombres</label>
-                            <input type="text" class="form-control" name="nombres" value="{{$personal->nombres}}">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" value="{{$user->name}}">
                         </div>
                         <div class="form-group">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control" name="apellidos" value="{{$personal->apellidos}}">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="email" value="{{$user->email}}">
                         </div>
                         <div class="form-group">
-                            <label>Doc. Identidad</label>
-                            <input type="text" class="form-control" name="doc_ide" value="{{$personal->doc_ide}}">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password" value="{{$user->password}}">
                         </div>
                         <div class="form-group">
                             <label>Tipo</label>
@@ -26,28 +26,36 @@
                                 ?>
 
                                 @foreach($roles as $rol)
-                                    <option value="{{$rol->id}}" {{$personal->tipo == $rol->id?'selected':''}}>{{$rol->detalle}}</option>
+                                    <option value="{{$rol->id}}" {{$user->tipo == $rol->id?'selected':''}}>{{$rol->detalle}}</option>
                                 @endforeach
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select class="form-control" id="estado" name="estado">
+                                <option value="1" {{$user->tipo == 1?'selected':''}}>Activo</option>
+                                <option value="0" {{$user->tipo == 0?'selected':''}}>Eliminado</option>
 
                             </select>
                         </div>
 {{--                        <div class="form-group">--}}
 {{--                            <label>Tipo</label>--}}
 {{--                            <select class="form-control" id="tipo" name="tipo" onchange="cambiaTipo()">--}}
-{{--                                <option value="-1" {{$personal->tipo == '-1'?'selected':''}}>Cesado</option>--}}
-{{--                                <option value="0" {{$personal->tipo == '0'?'selected':''}}>Personal</option>--}}
-{{--                                <option value="1" {{$personal->tipo == '1'?'selected':''}}>Administrativo</option>--}}
-{{--                                <option value="2" {{$personal->tipo == '2'?'selected':''}}>Supervisor</option>--}}
+{{--                                <option value="-1" {{$user->tipo == '-1'?'selected':''}}>Cesado</option>--}}
+{{--                                <option value="0" {{$user->tipo == '0'?'selected':''}}>Personal</option>--}}
+{{--                                <option value="1" {{$user->tipo == '1'?'selected':''}}>Administrativo</option>--}}
+{{--                                <option value="2" {{$user->tipo == '2'?'selected':''}}>Supervisor</option>--}}
 {{--                            </select>--}}
 {{--                        </div>--}}
 {{--                        <div id="supervisor-auth">--}}
 {{--                            <div class="form-group">--}}
 {{--                                <label>Usuario</label>--}}
-{{--                                <input type="text" class="form-control" name="usuario" value="{{$personal->usuario}}">--}}
+{{--                                <input type="text" class="form-control" name="usuario" value="{{$user->usuario}}">--}}
 {{--                            </div>--}}
 {{--                            <div class="form-group">--}}
 {{--                                <label>Clave</label>--}}
-{{--                                <input type="password" class="form-control" name="clave" value="{{$personal->clave}}">--}}
+{{--                                <input type="password" class="form-control" name="clave" value="{{$user->clave}}">--}}
 {{--                            </div>--}}
 {{--                        </div>--}}
                         <div class="form-group">

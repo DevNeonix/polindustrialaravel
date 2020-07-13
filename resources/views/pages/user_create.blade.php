@@ -4,18 +4,18 @@
         <div class="col-12 col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{route('admin.personal.store')}}" method="post">
+                    <form action="{{route('admin.user.store')}}" method="post">
                         <div class="form-group">
-                            <label>Nombres</label>
-                            <input type="text" class="form-control" name="nombres" value="{{old('nombres')}}">
+                            <label>Name</label>
+                            <input type="text" class="form-control" name="name" value="{{old('name')}}">
                         </div>
                         <div class="form-group">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control" name="apellidos" value="{{old('apellidos')}}">
+                            <label>Email</label>
+                            <input type="text" class="form-control" name="email" value="{{old('email')}}">
                         </div>
                         <div class="form-group">
-                            <label>Doc. Identidad</label>
-                            <input type="text" class="form-control" name="doc_ide" value="{{old('doc_ide')}}">
+                            <label>Password</label>
+                            <input type="password" class="form-control" name="password" value="{{old('password')}}">
                         </div>
                         <div class="form-group">
                             <label>Tipo</label>
@@ -26,8 +26,16 @@
                                 ?>
 
                                 @foreach($roles as $rol)
-                                        <option value="{{$rol->id}}" >{{$rol->detalle}}</option>
+                                    <option value="{{$rol->id}}">{{$rol->detalle}}</option>
                                 @endforeach
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select class="form-control" id="estado" name="estado">
+                                <option value="1">Activo</option>
+                                <option value="0">Eliminado</option>
 
                             </select>
                         </div>

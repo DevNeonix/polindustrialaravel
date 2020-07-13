@@ -27,7 +27,7 @@ Route::get('login', function () {
 Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
     $usuario = $request->input('usuario');
     $clave = $request->input('clave');
-    $user = DB::table('personal')->where('usuario', $usuario)->where('clave', $clave);
+    $user = DB::table('users')->where('email', $usuario)->where('password', $clave);
     if ($user->count() == 0) {
         return redirect()->to('login')->withErrors('Las creedenciales no corresponden con nuestros registros.');
     } else {
@@ -38,6 +38,69 @@ Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
 
 
 Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
+
+
+    Route::get('users', function (Request $request) {
+
+        $data = DB::table('users');
+        if (!empty($request->input('buscar'))) {
+            $data = $data->where('name', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->orWhere('email', 'like', '%' . $request->input('buscar') . '%');
+        }
+        $data = $data->paginate()->appends(request()->query());
+
+        return view('pages.users')->with('data', $data);
+
+    })->name('admin.users');
+
+    Route::get('user/create', function () {
+        return view('pages.user_create');
+    })->name('admin.user.create');
+
+
+    Route::get('user/edit/{id}', function ($id) {
+        $user = DB::table('users')->where('id', $id)->get()[0];
+        return view('pages.user_edit')->with(compact('user'));
+    })->name('admin.user.edit');
+
+    Route::post('user/edit/{id}', function ($id, Request $request) {
+
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $tipo = $request->input('tipo');
+        $estado = $request->input('estado');
+        DB::table('users')->where('id', $id)->update([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'tipo' => $tipo,
+            'estado' => $estado,
+        ], 'id');
+        return redirect()->route('admin.users')->with('success', "El usuario  ha sido modificado correctamente.");
+    })->name('admin.user.update');
+    Route::post('user', function (Request $request) {
+
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $tipo = $request->input('tipo');
+        $estado = $request->input('estado');
+        $id = DB::table('users')->insertGetId([
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+            'tipo' => $tipo,
+            'estado' => $estado,
+//            'usuario' => $usuario,
+//            'clave' => $clave
+        ], 'id');
+
+
+        return redirect()->route('admin.users')->with('success', "El usuario #${id} ha sido registrado correctamente.");
+    })->name('admin.user.store');
+
+
     Route::get('close', function () {
         Session::flush();
         return redirect()->to(route('login'));
@@ -52,9 +115,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         $data = DB::table('personal');
         if (!empty($request->input('buscar'))) {
             //$data = $data->where('tipo', '>', 0);
-	    //SELECT * FROM `personal` WHERE nombres like '%mireya%'
+            //SELECT * FROM `personal` WHERE nombres like '%mireya%'
             $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
-	    $data = $data->orWhere('apellidos','like','%'.$request->input('buscar').'%');
+            $data = $data->orWhere('apellidos', 'like', '%' . $request->input('buscar') . '%');
             $data = $data->orWhere('doc_ide', 'like', '%' . $request->input('buscar') . '%');
         }
         $data = $data->orderBy('apellidos', 'asc')->paginate()->appends(request()->query());
@@ -72,16 +135,16 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         $apellidos = $request->input('apellidos');
         $doc_ide = $request->input('doc_ide');
         $tipo = $request->input('tipo');
-        $usuario = $request->input('usuario');
-        $clave = $request->input('clave');
+//        $usuario = $request->input('usuario');
+//        $clave = $request->input('clave');
 
         $id = DB::table('personal')->insertGetId([
             'nombres' => $nombres,
             'apellidos' => $apellidos,
             'doc_ide' => $doc_ide,
             'tipo' => $tipo,
-            'usuario' => $usuario,
-            'clave' => $clave
+//            'usuario' => $usuario,
+//            'clave' => $clave
         ], 'id');
 
 
@@ -102,14 +165,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         $doc_ide = $request->input('doc_ide');
         $tipo = $request->input('tipo');
         $usuario = $request->input('usuario');
-        $clave = $request->input('clave');
+//        $clave = $request->input('clave');
         DB::table('personal')->where('id', $id)->update([
             'nombres' => $nombres,
             'apellidos' => $apellidos,
             'doc_ide' => $doc_ide,
             'tipo' => $tipo,
-            'usuario' => $usuario,
-            'clave' => $clave
+//            'usuario' => $usuario,
+//            'clave' => $clave
         ], 'id');
         return redirect()->route('admin.personal')->with('success', "El personal  ha sido modificado correctamente.");
     })->name('admin.personal.update');

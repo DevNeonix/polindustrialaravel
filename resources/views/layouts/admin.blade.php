@@ -388,8 +388,8 @@
     <div class="logo">
         Admin  | <?php
         $id = Session::get('usuario');
-        $user = DB::table('personal')->where('id', $id)->get()[0];
-        echo $user->nombres." ".$user->apellidos;
+        $user = DB::table('users')->where('id', $id)->get()[0];
+        echo $user->name;
         ?>
     </div>
 
@@ -398,6 +398,7 @@
     <ul>
 
         @if($user->tipo == 1)
+            <li><a href="{{route('admin.users')}}"><i class="fa fa-server"></i><span>Usuarios</span></a></li>
             <li><a href="{{route('admin.personal')}}"><i class="fa fa-users"></i><span>Personal</span></a></li>
             <li><a href="{{route('admin.ots')}}"><i class="fa fa-server"></i><span>Ots</span></a></li>
             <li><a href="{{route('admin.ots_personal')}}"><i

@@ -26,7 +26,6 @@ class PersonalUpdateRequest extends FormRequest
         return [
             'nombres' => 'required',
             'apellidos' => 'required',
-
             'tipo' => 'required',
         ];
     }
