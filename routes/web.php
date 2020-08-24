@@ -11,6 +11,7 @@
 |
 */
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -19,92 +20,18 @@ use Illuminate\Support\Facades\Session;
 Route::get('/', function () {
     return redirect()->to('login');
 });
-Route::get('login', function () {
-    return view('pages.login');
-})->name('login');
-
-
-Route::post('login', function (\App\Http\Requests\LoginRequest $request) {
-    $usuario = $request->input('usuario');
-    $clave = $request->input('clave');
-    $user = DB::table('users')->where('email', $usuario)->where('password', $clave);
-    if ($user->count() == 0) {
-        return redirect()->to('login')->withErrors('Las creedenciales no corresponden con nuestros registros.');
-    } else {
-        Session::put('usuario', $user->get()[0]->id . '');
-        return redirect()->to(route('admin.marcacion'));
-    }
-})->name('loginsubmit');
-
+Route::get('login', 'UserController@loginview')->name('login');
+Route::post('login', 'UserController@login')->name('loginsubmit');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
 
-    Route::get('users', function (Request $request) {
-
-        $data = DB::table('users');
-        if (!empty($request->input('buscar'))) {
-            $data = $data->where('name', 'like', '%' . $request->input('buscar') . '%');
-            $data = $data->orWhere('email', 'like', '%' . $request->input('buscar') . '%');
-        }
-        $data = $data->paginate()->appends(request()->query());
-
-        return view('pages.users')->with('data', $data);
-
-    })->name('admin.users');
-
-    Route::get('user/create', function () {
-        return view('pages.user_create');
-    })->name('admin.user.create');
-
-
-    Route::get('user/edit/{id}', function ($id) {
-        $user = DB::table('users')->where('id', $id)->get()[0];
-        return view('pages.user_edit')->with(compact('user'));
-    })->name('admin.user.edit');
-
-    Route::post('user/edit/{id}', function ($id, Request $request) {
-
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $tipo = $request->input('tipo');
-        $estado = $request->input('estado');
-        DB::table('users')->where('id', $id)->update([
-            'name' => $name,
-            'email' => $email,
-            'password' => $password,
-            'tipo' => $tipo,
-            'estado' => $estado,
-        ], 'id');
-        return redirect()->route('admin.users')->with('success', "El usuario  ha sido modificado correctamente.");
-    })->name('admin.user.update');
-    Route::post('user', function (Request $request) {
-
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $tipo = $request->input('tipo');
-        $estado = $request->input('estado');
-        $id = DB::table('users')->insertGetId([
-            'name' => $name,
-            'email' => $email,
-            'password' => $password,
-            'tipo' => $tipo,
-            'estado' => $estado,
-//            'usuario' => $usuario,
-//            'clave' => $clave
-        ], 'id');
-
-
-        return redirect()->route('admin.users')->with('success', "El usuario #${id} ha sido registrado correctamente.");
-    })->name('admin.user.store');
-
-
-    Route::get('close', function () {
-        Session::flush();
-        return redirect()->to(route('login'));
-    })->name('admin.close');
+    Route::get('users', 'UserController@list')->name('admin.users');
+    Route::get('user/create', 'UserController@create')->name('admin.user.create');
+    Route::post('user', 'UserController@store')->name('admin.user.store');
+    Route::get('user/edit/{id}', 'UserController@edit')->name('admin.user.edit');
+    Route::post('user/edit/{id}', 'UserController@update')->name('admin.user.update');
+    Route::get('close','UserController@cerrarsesion')->name('admin.close');
 
 
     Route::get('home', function () {
