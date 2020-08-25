@@ -25,6 +25,15 @@ class OrdenTrabajoPersonalController extends Controller
         $ot = $request->input("ot");
         return response()->json(myResponse::apiResponse(VOrdenTrabajoPersonal::where('id_ot', $ot)->get(), "Listado de personal por OT"), 200, [], 256);
     }
+    public function listOts(Request $request){
+        $data = DB::table('orden_trabajo');
+        if (!empty($request->input('buscar'))) {
+            $data = $data->where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->orWhere('cliente', 'like', '%' . $request->input('buscar') . '%');
+        }
+        $data = $data->paginate()->appends(request()->query());
+        return view('pages.ots_personal')->with('data', $data);
+    }
 
     public function listotsporpersonal(Request $request)
     {

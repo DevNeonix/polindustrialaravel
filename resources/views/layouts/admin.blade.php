@@ -407,10 +407,13 @@
             <li><a href="{{route('admin.reporte.asistencia')}}"><i
                             class="fa fa-list"></i><span>Reporte de asistencia</span></a>
             </li>
+            <li><a href="{{route('admin.marcacion.asistenciadia')}}"><i
+                            class="fa fa-list"></i><span>Reporte de asistencia por día</span></a></li>
         @endif
         @if($user->tipo == 1 || $user->tipo == 2)
             <li><a href="{{route('admin.marcacion')}}"><i
                             class="fa fa-calendar"></i><span>Marcación de personal</span></a></li>
+
         @endif
         <li><a href="{{route('admin.close')}}"><i class="fa fa-close"></i><span>Cerrar Sesión </span></a></li>
     </ul>

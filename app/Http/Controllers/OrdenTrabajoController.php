@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OtsStoreRequest;
+use App\Http\Requests\OtsUpdateRequest;
 use App\OrdenTrabajo;
 use App\Util\myResponse;
 use Illuminate\Http\Request;
@@ -13,9 +15,19 @@ class OrdenTrabajoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
+        if (!empty($request->input('buscar'))) {
+            $data = OrdenTrabajo::where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->orWhere('cliente', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->paginate()->appends(request()->query());
+        } else {
+            $data = OrdenTrabajo::paginate()->appends(request()->query());
+        }
+
+
+        return view('pages.ots')->with('data', $data);
     }
 
     public function list()
@@ -26,22 +38,31 @@ class OrdenTrabajoController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function create()
     {
-        //
+        return view('pages.ots_create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(OtsStoreRequest $request)
     {
-        //
+        $nro_orden = $request->input('nro_orden');
+        $producto_fabricar = $request->input('producto_fabricar');
+        $cliente = $request->input('cliente');
+        $ot = OrdenTrabajo::create([
+            'nro_orden' => $nro_orden,
+            'producto_fabricar' => $producto_fabricar,
+            'cliente' => $cliente,
+            'estado' => '1'
+        ]);
+        return redirect()->route('admin.ots')->with('success', "La OT #" . $ot->id . " ha sido registrado correctamente.");
     }
 
     /**
@@ -59,11 +80,12 @@ class OrdenTrabajoController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function edit($id)
     {
-        //
+        $ot = OrdenTrabajo::where('id', $id)->first();
+        return view('pages.ots_edit')->with(compact('ot'));
     }
 
     /**
@@ -71,11 +93,21 @@ class OrdenTrabajoController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(OtsUpdateRequest $request, $id)
     {
-        //
+        $nro_orden = $request->input('nro_orden');
+        $producto_fabricar = $request->input('producto_fabricar');
+        $cliente = $request->input('cliente');
+        $estado = $request->input('estado');
+        $ot = OrdenTrabajo::where('id', $id)->update([
+            'nro_orden' => $nro_orden,
+            'producto_fabricar' => $producto_fabricar,
+            'cliente' => $cliente,
+            'estado' => $estado
+        ]);
+        return redirect()->route('admin.ots')->with('success', "La OT ha sido modificado correctamente.");
     }
 
     /**

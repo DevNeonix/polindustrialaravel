@@ -38,59 +38,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::post('personal/edit/{id}', 'PersonalController@update')->name('admin.personal.update');
 
 
-    Route::get('ots', function (Request $request) {
-        $data = DB::table('orden_trabajo');
-        if (!empty($request->input('buscar'))) {
-            $data = $data->where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
-            $data = $data->orWhere('cliente', 'like', '%' . $request->input('buscar') . '%');
-        }
-        $data = $data->paginate()->appends(request()->query());
+    Route::get('ots', 'OrdenTrabajoController@index')->name('admin.ots');
+    Route::get('ots/create', 'OrdenTrabajoController@create')->name('admin.ots.create');
+    Route::post('ots/create', 'OrdenTrabajoController@store')->name('admin.ots.store');
+    Route::get('ots/edit/{id}', 'OrdenTrabajoController@edit')->name('admin.ots.edit');
+    Route::post('ots/edit/{id}', 'OrdenTrabajoController@update')->name('admin.ots.update');
 
-        return view('pages.ots')->with('data', $data);
-    })->name('admin.ots');
-    Route::get('ots/create', function () {
-        return view('pages.ots_create');
-    })->name('admin.ots.create');
-    Route::post('ots/create', function (\App\Http\Requests\OtsStoreRequest $request) {
-        $nro_orden = $request->input('nro_orden');
-        $producto_fabricar = $request->input('producto_fabricar');
-        $cliente = $request->input('cliente');
-        $id = DB::table('orden_trabajo')->insertGetId([
-            'nro_orden' => $nro_orden,
-            'producto_fabricar' => $producto_fabricar,
-            'cliente' => $cliente,
-            'estado' => '1'
-        ], 'id');
-        return redirect()->route('admin.ots')->with('success', "La OT #${id} ha sido registrado correctamente.");
-    })->name('admin.ots.store');
-    Route::get('ots/edit/{id}', function ($id) {
-        $ot = DB::table('orden_trabajo')->where('id', $id)->get()[0];
-        return view('pages.ots_edit')->with(compact('ot'));
-    })->name('admin.ots.edit');
-    Route::post('ots/edit/{id}', function ($id, \App\Http\Requests\OtsUpdateRequest $request) {
 
-        $nro_orden = $request->input('nro_orden');
-        $producto_fabricar = $request->input('producto_fabricar');
-        $cliente = $request->input('cliente');
-        $estado = $request->input('estado');
-        $id = DB::table('orden_trabajo')->where('id', $id)->update([
-            'nro_orden' => $nro_orden,
-            'producto_fabricar' => $producto_fabricar,
-            'cliente' => $cliente,
-            'estado' => $estado
-        ], 'id');
-        return redirect()->route('admin.ots')->with('success', "La OT ha sido modificado correctamente.");
-    })->name('admin.ots.update');
-    Route::get('ots_personal', function (Request $request) {
-        $data = DB::table('orden_trabajo');
-        if (!empty($request->input('buscar'))) {
-            $data = $data->where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
-            $data = $data->orWhere('cliente', 'like', '%' . $request->input('buscar') . '%');
-        }
-        $data = $data->paginate()->appends(request()->query());
 
-        return view('pages.ots_personal')->with('data', $data);
-    })->name('admin.ots_personal');
+    Route::get('ots_personal', 'OrdenTrabajoController@listOts')->name('admin.ots_personal');
+
+
     Route::get('ots_personal/edit/{id}', function ($id, Request $request) {
         $data = DB::table('view_orden_trabajo_personal')->where('id_ot', $id)->get();
         return view('pages.ots_personal_edit')->with('data', $data)->with('ot', DB::table('orden_trabajo')->where('id', $id)->get());
@@ -107,6 +65,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         DB::table('orden_trabajo_personal')->where('personal', $personal)->where('orden_trabajo', $ot)->delete();
         return redirect()->route("admin.ots_personal.edit", $ot);
     })->name('admin.ots_personal.delete');
+
+
+
     Route::get('marcacion', function (Request $request) {
         $data = DB::table('orden_trabajo')->where('estado', '1');
         if (!empty($request->input('buscar'))) {
@@ -182,8 +143,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         $asistencias = DB::table("view_orden_trabajo_personal")->join("marcacion", function ($join) {
             $join->on("marcacion.personal", "=", "id_personal");
             $join->on("marcacion.orden_trabajo", "=", "id_ot");
-        })->whereBetween("fecha", [$f1, $f2->format('Y-m-d')])->get();
+        })->whereBetween("fecha", [$f1, $f2->format('Y-m-d')])->orderBy('nombre')->get();
 
         return view('pages.reportes.asistencia')->with('data', $asistencias);
     })->name("admin.reporte.asistencia");
+
+
+    Route::get('reportes/asistencia-dia', 'VMarcacionDiaController@index')->name('admin.marcacion.asistenciadia');
+
 });
