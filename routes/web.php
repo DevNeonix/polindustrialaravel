@@ -17,9 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-Route::get('/', function () {
-    return redirect()->to('login');
-});
+Route::get('/', 'AdminController@toLogin');
 Route::get('login', 'UserController@loginview')->name('login');
 Route::post('login', 'UserController@login')->name('loginsubmit');
 
@@ -31,78 +29,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::post('user', 'UserController@store')->name('admin.user.store');
     Route::get('user/edit/{id}', 'UserController@edit')->name('admin.user.edit');
     Route::post('user/edit/{id}', 'UserController@update')->name('admin.user.update');
-    Route::get('close','UserController@cerrarsesion')->name('admin.close');
+    Route::get('close', 'UserController@cerrarsesion')->name('admin.close');
+    Route::get('home', 'AdminController@toHome')->name('admin.home');
+    Route::get('personal', 'PersonalController@index')->name('admin.personal');
+    Route::get('personal/create', 'PersonalController@create')->name('admin.personal.create');
+    Route::post('personal', 'PersonalController@store')->name('admin.personal.store');
+    Route::get('personal/edit/{id}', 'PersonalController@edit')->name('admin.personal.edit');
+    Route::post('personal/edit/{id}', 'PersonalController@update')->name('admin.personal.update');
 
-
-    Route::get('home', function () {
-        return view('pages.home');
-    })->name('admin.home');
-
-    Route::get('personal', function (Request $request) {
-        $data = DB::table('personal');
-        if (!empty($request->input('buscar'))) {
-            //$data = $data->where('tipo', '>', 0);
-            //SELECT * FROM `personal` WHERE nombres like '%mireya%'
-            $data = $data->where('nombres', 'like', '%' . $request->input('buscar') . '%');
-            $data = $data->orWhere('apellidos', 'like', '%' . $request->input('buscar') . '%');
-            $data = $data->orWhere('doc_ide', 'like', '%' . $request->input('buscar') . '%');
-        }
-        $data = $data->orderBy('apellidos', 'asc')->paginate()->appends(request()->query());
-
-        return view('pages.personal')->with('data', $data);
-    })->name('admin.personal');
-
-    Route::get('personal/create', function () {
-        return view('pages.personal_create');
-    })->name('admin.personal.create');
-
-    Route::post('personal', function (\App\Http\Requests\PersonalStoreRequest $request) {
-
-        $nombres = $request->input('nombres');
-        $apellidos = $request->input('apellidos');
-        $doc_ide = $request->input('doc_ide');
-        $tipo = $request->input('tipo');
-//        $usuario = $request->input('usuario');
-//        $clave = $request->input('clave');
-
-        $id = DB::table('personal')->insertGetId([
-            'nombres' => $nombres,
-            'apellidos' => $apellidos,
-            'doc_ide' => $doc_ide,
-            'tipo' => $tipo,
-//            'usuario' => $usuario,
-//            'clave' => $clave
-        ], 'id');
-
-
-        return redirect()->route('admin.personal')->with('success', "El personal #${id} ha sido registrado correctamente.");
-    })->name('admin.personal.store');
-
-
-    Route::get('personal/edit/{id}', function ($id) {
-        $personal = DB::table('personal')->where('id', $id)->get()[0];
-        return view('pages.personal_edit')->with(compact('personal'));
-    })->name('admin.personal.edit');
-
-
-    Route::post('personal/edit/{id}', function ($id, \App\Http\Requests\PersonalUpdateRequest $request) {
-
-        $nombres = $request->input('nombres');
-        $apellidos = $request->input('apellidos');
-        $doc_ide = $request->input('doc_ide');
-        $tipo = $request->input('tipo');
-        $usuario = $request->input('usuario');
-//        $clave = $request->input('clave');
-        DB::table('personal')->where('id', $id)->update([
-            'nombres' => $nombres,
-            'apellidos' => $apellidos,
-            'doc_ide' => $doc_ide,
-            'tipo' => $tipo,
-//            'usuario' => $usuario,
-//            'clave' => $clave
-        ], 'id');
-        return redirect()->route('admin.personal')->with('success', "El personal  ha sido modificado correctamente.");
-    })->name('admin.personal.update');
 
     Route::get('ots', function (Request $request) {
         $data = DB::table('orden_trabajo');
@@ -114,7 +48,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
         return view('pages.ots')->with('data', $data);
     })->name('admin.ots');
-
     Route::get('ots/create', function () {
         return view('pages.ots_create');
     })->name('admin.ots.create');
@@ -130,14 +63,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         ], 'id');
         return redirect()->route('admin.ots')->with('success', "La OT #${id} ha sido registrado correctamente.");
     })->name('admin.ots.store');
-
-
     Route::get('ots/edit/{id}', function ($id) {
         $ot = DB::table('orden_trabajo')->where('id', $id)->get()[0];
         return view('pages.ots_edit')->with(compact('ot'));
     })->name('admin.ots.edit');
-
-
     Route::post('ots/edit/{id}', function ($id, \App\Http\Requests\OtsUpdateRequest $request) {
 
         $nro_orden = $request->input('nro_orden');
@@ -152,8 +81,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         ], 'id');
         return redirect()->route('admin.ots')->with('success', "La OT ha sido modificado correctamente.");
     })->name('admin.ots.update');
-
-
     Route::get('ots_personal', function (Request $request) {
         $data = DB::table('orden_trabajo');
         if (!empty($request->input('buscar'))) {
@@ -164,12 +91,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
         return view('pages.ots_personal')->with('data', $data);
     })->name('admin.ots_personal');
-
     Route::get('ots_personal/edit/{id}', function ($id, Request $request) {
         $data = DB::table('view_orden_trabajo_personal')->where('id_ot', $id)->get();
         return view('pages.ots_personal_edit')->with('data', $data)->with('ot', DB::table('orden_trabajo')->where('id', $id)->get());
     })->name('admin.ots_personal.edit');
-
     Route::get('ots_personal/registrar', function (Request $request) {
         $personal = $request->input('personal');
         $ot = $request->input('ot');
@@ -182,7 +107,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         DB::table('orden_trabajo_personal')->where('personal', $personal)->where('orden_trabajo', $ot)->delete();
         return redirect()->route("admin.ots_personal.edit", $ot);
     })->name('admin.ots_personal.delete');
-
     Route::get('marcacion', function (Request $request) {
         $data = DB::table('orden_trabajo')->where('estado', '1');
         if (!empty($request->input('buscar'))) {
@@ -193,12 +117,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
         return view('pages.marcacion')->with('data', $data);
     })->name('admin.marcacion');
-
     Route::get('marcacion/registro/{id}', function ($id) {
         $ot = DB::table('orden_trabajo')->where("id", $id)->get()[0];
         return view('pages.marcacion_registro')->with('ot', $ot);
     })->name('admin.marcacion.registro');
-
     Route::post('marcacion/registro', function (Request $request) {
         $personal = $request->input('personal');
         $orden_trabajo = $request->input('orden_trabajo');
@@ -222,14 +144,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
         return response()->json(["message" => "Marcación eliminada correctamente"]);
     })->name('admin.marcacion.delete');
-
-
     Route::get('marcacion/faltas/{id}', function ($id, Request $request) {
         $ot = DB::table('orden_trabajo')->where("id", $id)->get()[0];
         return view('pages.marcacion_faltas')->with('ot', $ot);
 
     })->name('admin.marcacion.faltas');
-
     Route::get('marcacion/faltas', function (Request $request) {
         $ot = $request->input('ot');
         $personal = $request->input('personal');

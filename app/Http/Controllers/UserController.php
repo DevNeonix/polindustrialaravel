@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\User;
+use App\Util\myResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -25,6 +26,21 @@ class UserController extends Controller
         } else {
             Session::put('usuario', $user->get()[0]->id . '');
             return redirect()->to(route('admin.marcacion'));
+        }
+    }
+    public function loginApi(LoginRequest $request)
+    {
+        $usuario = $request->input('usuario');
+        $clave = $request->input('clave');
+        $user = User::where('email', $usuario)->where('password', $clave);
+        if ($usuario == "" || $clave == "") {
+            return response()->json(myResponse::apiResponse([], "Usuario o contraseña errada"), 403, [], 256);
+        }
+        if ($user->count() == 0) {
+            return response()->json(myResponse::apiResponse([], "Usuario o contraseña errada"), 403, [], 256);
+        } else {
+
+            return response()->json(myResponse::apiResponse($user->get()[0], "Bienvenido " . $user->get()[0]->name), 200, [], 256);
         }
     }
 

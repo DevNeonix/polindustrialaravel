@@ -386,7 +386,7 @@
         <span>Cerrar</span>
     </a>
     <div class="logo">
-        Admin  | <?php
+        Admin | <?php
         $id = Session::get('usuario');
         $user = DB::table('users')->where('id', $id)->get()[0];
         echo $user->name;
@@ -442,6 +442,12 @@
             $(this).find('i').removeClass('fa-close');
         }
     });
+    $('.sidebar').addClass('active');
+    $('.main').addClass('active');
+    $("#menu-action").toggleClass('active');
+    $("#menu-action").find('i').addClass('fa-close');
+    $("#menu-action").find('i').removeClass('fa-bars');
+
 
     // Add hover feedback on menu
     $('#menu-action').hover(function () {
