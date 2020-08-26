@@ -45,7 +45,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::post('ots/edit/{id}', 'OrdenTrabajoController@update')->name('admin.ots.update');
 
 
-
     Route::get('ots_personal', 'OrdenTrabajoController@listOts')->name('admin.ots_personal');
 
 
@@ -65,7 +64,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         DB::table('orden_trabajo_personal')->where('personal', $personal)->where('orden_trabajo', $ot)->delete();
         return redirect()->route("admin.ots_personal.edit", $ot);
     })->name('admin.ots_personal.delete');
-
 
 
     Route::get('marcacion', function (Request $request) {
@@ -126,28 +124,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         }
         return redirect()->back()->with(['success' => 'Falta registrada correctamente']);
     })->name('admin.marcacion.faltas.registro');
-    Route::get('reportes/asistencia', function () {
-        #"SELECT * FROM `view_orden_trabajo_personal` as vp inner join marcacion on marcacion.personal=vp.id_personal and marcacion.orden_trabajo=vp.id_ot""
-
-        if (empty(\request("f1")) || empty(\request("f2"))) {
-            $f1 = date("Y-m-d");
-            $f2 = new DateTime('+1 day');
-        } else {
-            $f1 = \request("f1");
-            $f2 = new DateTime(\request("f2"));
-            $f2->modify('+1 day');
-
-        }
 
 
-        $asistencias = DB::table("view_orden_trabajo_personal")->join("marcacion", function ($join) {
-            $join->on("marcacion.personal", "=", "id_personal");
-            $join->on("marcacion.orden_trabajo", "=", "id_ot");
-        })->whereBetween("fecha", [$f1, $f2->format('Y-m-d')])->orderBy('nombre')->get();
+    Route::get('reportes/asistencia', 'MarcacionController@asistencia')->name("admin.reporte.asistencia");
 
-        return view('pages.reportes.asistencia')->with('data', $asistencias);
-    })->name("admin.reporte.asistencia");
-
+    Route::get('reportes/asistencia/export', 'MarcacionController@export')->name("admin.reporte.asistencia.export");
 
     Route::get('reportes/asistencia-dia', 'VMarcacionDiaController@index')->name('admin.marcacion.asistenciadia');
 

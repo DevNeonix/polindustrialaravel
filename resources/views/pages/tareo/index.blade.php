@@ -58,7 +58,7 @@
                 @if($item->cantidad_marcaciones % 2 == 0)
                     @for($x=0;$x<$item->cantidad_marcaciones/2;$x++)
                         <td>{{\Illuminate\Support\Carbon::parse($asistencias[$x]->fecha)->diffInMinutes($asistencias[$x+1]->fecha)}}</td>
-                        <td>{{round(\Illuminate\Support\Carbon::parse($asistencias[$x]->fecha)->floatDiffInHours($asistencias[$x+1]->fecha),2)}}</td>
+{{--                        <td>{{round(\Illuminate\Support\Carbon::parse($asistencias[$x]->fecha)->floatDiffInHours($asistencias[$x+1]->fecha),2)}}</td>--}}
                         <?php
                         $x++
                         ?>
