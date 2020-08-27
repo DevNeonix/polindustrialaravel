@@ -12,4 +12,5 @@ class VMarcacionDiaController extends Controller
         $data = VMarcacionDia::all();
         return view('pages.tareo.index')->with(compact('data'));
     }
+
 }

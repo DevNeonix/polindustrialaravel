@@ -131,5 +131,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::get('reportes/asistencia/export', 'MarcacionController@export')->name("admin.reporte.asistencia.export");
 
     Route::get('reportes/asistencia-dia', 'VMarcacionDiaController@index')->name('admin.marcacion.asistenciadia');
-
+    Route::get('reportes/asistencia-dia/export', 'MarcacionController@export2')->name("admin.reporte.asistenciadia.export");
 });

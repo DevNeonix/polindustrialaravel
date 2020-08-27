@@ -3,12 +3,15 @@
 namespace App\Exports;
 
 use App\VMarcacion;
+use App\VMarcacionDia;
 use DateTime;
+use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class VMarcacionExport implements FromCollection, WithHeadings
+class VMarcacionExport implements FromCollection, WithHeadings,FromView
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -60,4 +63,6 @@ class VMarcacionExport implements FromCollection, WithHeadings
             'FECHA'
         ];
     }
+
+
 }

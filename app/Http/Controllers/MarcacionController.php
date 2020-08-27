@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\VMarcacionExport;
+use App\Exports\VMarcacionExportView;
 use App\Marcacion;
 use App\MarcacionObs;
 use App\Util\myResponse;
@@ -69,6 +70,12 @@ class MarcacionController extends Controller
 
     public function export()
     {
-        return Excel::download(new VMarcacionExport(request("f1"),request("f2")), 'marcacion.xlsx');
+        return Excel::download(new VMarcacionExport(request("f1"), request("f2")), 'marcacion.xlsx');
+    }
+
+    public function export2()
+    {
+        return Excel::download(new VMarcacionExportView(), 'marcacion.xlsx');
+
     }
 }
