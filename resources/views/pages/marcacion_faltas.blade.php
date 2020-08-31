@@ -68,7 +68,7 @@
                                                     <option value="1">Vacaciones</option>
                                                     <option value="2">Permiso</option>
                                                     <option value="3">Falta injustificada</option>
-                                                    <option value="4">Licensia médica</option>
+                                                    <option value="4">Licencia médica</option>
 
                                                 </select>
                                             </div>
