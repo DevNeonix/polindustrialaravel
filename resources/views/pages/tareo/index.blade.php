@@ -5,10 +5,10 @@
 
         <div class="form-inline">
             <div class="form-group mx-1">
-                <input type="date" id="f1" name="fechaini" class="form-control txtdate" value="{{request("f1")}}">
+                <input type="date" id="f1" name="fechaini" class="form-control txtdate" value="{{request("fechaini")}}">
             </div>
             <div class="form-group mx-1">
-                <input type="date" id="f2" name="fechafin" class="form-control txtdate" value="{{request("f2")}}">
+                <input type="date" id="f2" name="fechafin" class="form-control txtdate" value="{{request("fechafin")}}">
             </div>
             <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
         </div>
