@@ -146,7 +146,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     })->name('admin.marcacion.faltas.registro');
 
 
-    Route::get('reportes/asistencia', '.@asistencia')->name("admin.reporte.asistencia");
+    Route::get('reportes/asistencia', 'MarcacionController.@asistencia')->name("admin.reporte.asistencia");
 
     Route::get('reportes/asistencia/export', 'MarcacionController@export')->name("admin.reporte.asistencia.export");
 
