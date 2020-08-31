@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class VMarcacionExport implements FromCollection, WithHeadings,FromView
+class VMarcacionExport implements FromCollection, WithHeadings
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -65,4 +65,8 @@ class VMarcacionExport implements FromCollection, WithHeadings,FromView
     }
 
 
+    public function view(): View
+    {
+        // TODO: Implement view() method.
+    }
 }
