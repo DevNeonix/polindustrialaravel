@@ -1,6 +1,18 @@
 @extends('layouts.admin')
 @section('content')
     <h1 class="h4">Listado de Asistencias</h1>
+    <form>
+
+        <div class="form-inline">
+            <div class="form-group mx-1">
+                <input type="date" id="f1" name="fechaini" class="form-control txtdate" value="{{request("f1")}}">
+            </div>
+            <div class="form-group mx-1">
+                <input type="date" id="f2" name="fechafin" class="form-control txtdate" value="{{request("f2")}}">
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Buscar</button>
+        </div>
+    </form>
     <a href="{{route('admin.reporte.asistenciadia.export')}}" class="btn btn-primary btn-sm m-0 p-0">Exportar</a>
     <table class="table table-sm table-hover" style="font-size: 10px">
         <tr>
