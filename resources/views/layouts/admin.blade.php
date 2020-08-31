@@ -84,7 +84,7 @@
         }
 
         .header #menu-action.active {
-            /*width: 250px;*/
+            width: 250px;
             min-width: fit-content;
             -webkit-transition: all 0.2s ease-in-out;
             transition: all 0.2s ease-in-out;
