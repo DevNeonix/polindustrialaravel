@@ -83,18 +83,28 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
     Route::post('marcacion/registro', function (Request $request) {
         $personal = $request->input('personal');
         $orden_trabajo = $request->input('orden_trabajo');
-        if (!empty($personal)) {
+        $errores = "";
+        if (!empty($personal) &&!empty($orden_trabajo) ) {
             foreach ($personal as $personal_item) {
-                DB::table('marcacion')->insert([
-                    "personal" => $personal_item,
-                    "orden_trabajo" => $orden_trabajo,
-                    "fecha" => \Carbon\Carbon::now(),
-                    "usuario_registra" => Session::get("usuario"),
-                ]);
+
+                //VALIDAR DUPLICADOS DE ASISTENCIAS (RESTRICCION DE 5 MIN)
+
+                $validaMarcacionDoble = \App\Marcacion::where('personal', $personal_item)->where('orden_trabajo', $orden_trabajo)->orderBy("id","desc")->first();
+                if(\Carbon\Carbon::now()->diffInSeconds($validaMarcacionDoble->fecha) >= 300){
+                    DB::table('marcacion')->insert([
+                        "personal" => $personal_item,
+                        "orden_trabajo" => $orden_trabajo,
+                        "fecha" => \Carbon\Carbon::now(),
+                        "usuario_registra" => Session::get("usuario"),
+                    ]);
+                }else{
+                    $errores = $errores.". La marcación del personal ".$personal_item." esta duplicada, se ignorará. ";
+                }
+
             }
         }
 
-        return response()->json(["message" => "Marcación registrada correctamente"]);
+        return response()->json(["message" => "Marcación registrada correctamente ".$errores]);
     })->name('admin.marcacion.insert');
     Route::delete('marcacion/registro', function (Request $request) {
         $id = $request->input('id');

@@ -11,7 +11,7 @@
 
                 <?php
 
-                $empleados = DB::table('view_orden_trabajo_personal')->where('id_ot', $ot->id)->where('tipo','>',-1)->get();
+                $empleados = DB::table('view_orden_trabajo_personal')->where('id_ot', $ot->id)->where('tipo', '>', -1)->get();
 
                 ?>
                 <table class="table table-responsive">
@@ -34,6 +34,8 @@
 
                                     $validasql = DB::select(DB::raw("select mod(count(*),2) as valida  from marcacion where personal=" . $i->id_personal . " and year(fecha)=year(now()) and month(fecha)=month(now()) and day(fecha)=day(now()) and orden_trabajo <> '" . $ot->id . "' "));
                                     $v = intval($validasql[0]->valida);
+                                    //QUITANDO VALIDACION POR AHORA
+                                    $v = 0;
                                     ?>
                                     @if($v == 0)
 

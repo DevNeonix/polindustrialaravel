@@ -35,6 +35,22 @@ class OrdenTrabajoController extends Controller
         return response()->json(myResponse::apiResponse(OrdenTrabajo::all(), "Listado de OT's"), 200, [], 256);
     }
 
+    function listOts(Request $request)
+    {
+
+        if (!empty($request->input('buscar'))) {
+            $data = OrdenTrabajo::where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->orWhere('cliente', 'like', '%' . $request->input('buscar') . '%');
+            $data = $data->paginate()->appends(request()->query());
+        } else {
+
+            $data = OrdenTrabajo::paginate()->appends(request()->query());
+        }
+
+
+        return view('pages.ots_personal')->with('data', $data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
