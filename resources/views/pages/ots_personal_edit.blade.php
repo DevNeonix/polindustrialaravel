@@ -37,7 +37,7 @@
 
                         @foreach($disponibles as $i)
                             <tr>
-                                <td>{{$i->nombres}} {{$i->apellidos}}</td>
+                                <td>{{$i->apellidos}} {{$i->nombres}}</td>
                                 <td>
                                     <form action="{{route('admin.ots_personal.store')}}" method="get">
                                         <input type="hidden" name="personal" value="{{$i->id}}">

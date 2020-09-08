@@ -34,7 +34,9 @@ class MarcacionController extends Controller
                 "fecha" => \Carbon\Carbon::now(),
                 "usuario_registra" => $usr,
             ]);
-
+            if (strtolower($obs) == "observaciones") {
+                $obs = "";
+            }
             MarcacionObs::create([
                 "marcacion_id" => $marcacion->id,
                 "viatico" => $viatico,
@@ -70,7 +72,7 @@ class MarcacionController extends Controller
 
     public function export()
     {
-        return Excel::download(new VMarcacionExport(request("f1"), request("f2")), 'marcacion.xlsx');
+        return Excel::download(new VMarcacionExport(request("f1"), request("f2"), request("orden")), 'marcacion.xlsx');
     }
 
     public function export2()

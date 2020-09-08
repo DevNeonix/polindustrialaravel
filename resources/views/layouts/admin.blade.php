@@ -114,7 +114,8 @@
         .sidebar.active,
         .sidebar.hovered {
             /*width: 250px;*/
-            min-width: fit-content;
+            min-width: 250px;
+            width: fit-content;
             -webkit-transition: all 0.2s ease-in-out;
             transition: all 0.2s ease-in-out;
         }
@@ -397,25 +398,14 @@
 </div>
 <div class="sidebar">
     <ul>
+        @php
+            $menus = \App\Menu::join('user_menus', 'menus.id', '=', 'user_menus.menu_id')->get();
+        @endphp
 
-        @if($user->tipo == 1)
-            <li><a href="{{route('admin.users')}}"><i class="fa fa-server"></i><span>Usuarios</span></a></li>
-            <li><a href="{{route('admin.personal')}}"><i class="fa fa-users"></i><span>Personal</span></a></li>
-            <li><a href="{{route('admin.ots')}}"><i class="fa fa-server"></i><span>Ots</span></a></li>
-            <li><a href="{{route('admin.ots_personal')}}"><i
-                            class="fa fa-dashboard"></i><span>Personal por Ots</span></a>
-            </li>
-            <li><a href="{{route('admin.reporte.asistencia')}}"><i
-                            class="fa fa-list"></i><span>Reporte de asistencia</span></a>
-            </li>
-            <li><a href="{{route('admin.marcacion.asistenciadia')}}"><i
-                            class="fa fa-list"></i><span>Reporte de asistencia por día</span></a></li>
-        @endif
-        @if($user->tipo == 1 || $user->tipo == 2)
-            <li><a href="{{route('admin.marcacion')}}"><i
-                            class="fa fa-calendar"></i><span>Marcación de personal</span></a></li>
+        @foreach($menus as $menu)
+            <li><a href="{{route($menu->ruta)}}"><i class="fa fa-{{$menu->icon}}"></i><span>{{$menu->titulo}}</span></a></li>
+        @endforeach
 
-        @endif
         <li><a href="{{route('admin.close')}}"><i class="fa fa-close"></i><span>Cerrar Sesión </span></a></li>
     </ul>
 </div>
@@ -446,11 +436,11 @@
             $(this).find('i').removeClass('fa-close');
         }
     });
-    $('.sidebar').addClass('active');
-    $('.main').addClass('active');
-    $("#menu-action").toggleClass('active');
-    $("#menu-action").find('i').addClass('fa-close');
-    $("#menu-action").find('i').removeClass('fa-bars');
+    // $('.sidebar').addClass('active');
+    // $('.main').addClass('active');
+    // $("#menu-action").toggleClass('active');
+    // $("#menu-action").find('i').addClass('fa-close');
+    // $("#menu-action").find('i').removeClass('fa-bars');
 
 
     // Add hover feedback on menu

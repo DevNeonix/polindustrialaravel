@@ -49,7 +49,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
 
     Route::get('ots_personal/edit/{id}', function ($id, Request $request) {
-        $data = DB::table('view_orden_trabajo_personal')->where('id_ot', $id)->get();
+        $data = DB::table('view_orden_trabajo_personal')->where('id_ot', $id)->orderBy('nombre')->get();
         return view('pages.ots_personal_edit')->with('data', $data)->with('ot', DB::table('orden_trabajo')->where('id', $id)->get());
     })->name('admin.ots_personal.edit');
     Route::get('ots_personal/registrar', function (Request $request) {
