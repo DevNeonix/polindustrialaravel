@@ -39,7 +39,7 @@
                     <b>Personal: </b>
                     <ul>
                         <?php
-                        $personal = \Illuminate\Support\Facades\DB::table('view_orden_trabajo_personal')->where('id_ot', $i->id)->get();
+                        $personal = \Illuminate\Support\Facades\DB::table('view_orden_trabajo_personal')->where('id_ot', $i->id)->orderBy('nombre')->get();
                         ?>
 
                         @foreach($personal as $p)
