@@ -31,7 +31,7 @@
                     <hr>
                     <h6>Disponibles</h6>
                     <?php
-                    $disponibles = DB::select(DB::raw("SELECT * FROM personal where id not in (select id_personal from `view_orden_trabajo_personal` where id_ot=" . $ottt . ")"));
+                    $disponibles = DB::select(DB::raw("SELECT * FROM personal where id not in (select id_personal from `view_orden_trabajo_personal` where id_ot=" . $ottt . ") order by apellidos"));
                     ?>
                     <table>
 
