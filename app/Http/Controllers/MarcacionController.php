@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\VMarcacionExport;
-use App\Exports\VMarcacionExportView;
+use DateTime;
+use App\Personal;
 use App\Marcacion;
 use App\MarcacionObs;
-use App\Personal;
 use App\Util\myResponse;
-use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Exports\VMarcacionExport;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\VMarcacionExportView;
 
 class MarcacionController extends Controller
 {
@@ -80,6 +81,15 @@ class MarcacionController extends Controller
         return view('pages.extras.index', compact('personal'));
     }
 
+    public function list(Request $request) {
+        $personal = $request->input('personal');
+        $ot = $request->input('orden_trabajo');
+        
+        $data = Marcacion::selectRaw('distinct LEFT(fecha, 10) as fecha')->where('fecha','>',Carbon::now()->subDays(5))->where('personal',$personal)->where('orden_trabajo',$ot)->get();
+
+        return response()->json($data);
+
+    }
 
     public function export()
     {

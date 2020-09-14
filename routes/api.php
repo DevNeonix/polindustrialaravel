@@ -25,4 +25,5 @@ Route::get('ots_personal2', 'OrdenTrabajoPersonalController@listotsporpersonal2'
 Route::get('personal_ots', 'OrdenTrabajoPersonalController@listotsporpersonal')->name('admin.personal_ots');
 Route::get('ots_personal_disponible', 'OrdenTrabajoPersonalController@personal_disponible_por_ot')->name('admin.ots_personal_disponible');
 Route::get('marcacion/registro', 'MarcacionController@registro')->name('marcacion.registroapi');
+Route::get('marcacion/list', 'MarcacionController@list')->name('api.marcacion.list');
 
