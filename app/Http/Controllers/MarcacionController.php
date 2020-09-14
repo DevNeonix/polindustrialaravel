@@ -6,6 +6,7 @@ use App\Exports\VMarcacionExport;
 use App\Exports\VMarcacionExportView;
 use App\Marcacion;
 use App\MarcacionObs;
+use App\Personal;
 use App\Util\myResponse;
 use DateTime;
 use Illuminate\Http\Request;
@@ -69,6 +70,13 @@ class MarcacionController extends Controller
 
         return view('pages.reportes.asistencia')->with('data', $asistencias);
     }
+
+    public function extras()
+    {
+        $personal = Personal::where('tipo','>','-1')->orderBy("apellidos")->get();
+        return view('pages.extras.index', compact('personal'));
+    }
+
 
     public function export()
     {

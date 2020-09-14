@@ -25,7 +25,9 @@ class OrdenTrabajoPersonalController extends Controller
         $ot = $request->input("ot");
         return response()->json(myResponse::apiResponse(VOrdenTrabajoPersonal::where('id_ot', $ot)->get(), "Listado de personal por OT"), 200, [], 256);
     }
-    public function listOts(Request $request){
+
+    public function listOts(Request $request)
+    {
         $data = DB::table('orden_trabajo');
         if (!empty($request->input('buscar'))) {
             $data = $data->where('producto_fabricar', 'like', '%' . $request->input('buscar') . '%');
@@ -46,7 +48,17 @@ class OrdenTrabajoPersonalController extends Controller
         return response()->json(myResponse::apiResponse($exec), 200, [], 256);
     }
 
-    public function personal_disponible_por_ot(Request $request){
+    public function listotsporpersonal2(Request $request)
+    {
+        $id = $request->input("id");
+
+
+        $exec = VOrdenTrabajoPersonal::where('id_personal', $id)->get();
+        return response()->json(myResponse::apiResponse($exec), 200, [], 256);
+    }
+
+    public function personal_disponible_por_ot(Request $request)
+    {
         $data = array();
         $ot = $request->input("ot");
 

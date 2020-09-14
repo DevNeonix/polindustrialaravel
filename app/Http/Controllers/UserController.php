@@ -6,6 +6,7 @@ use App\Http\Requests\LoginRequest;
 use App\User;
 use App\Util\myResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -24,6 +25,7 @@ class UserController extends Controller
         if ($user->count() == 0) {
             return redirect()->to('login')->withErrors('Las creedenciales no corresponden con nuestros registros.');
         } else {
+            Auth::loginUsingId($user->get()[0]->id);
             Session::put('usuario', $user->get()[0]->id . '');
             return redirect()->to(route('admin.marcacion'));
         }

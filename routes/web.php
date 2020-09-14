@@ -145,11 +145,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
         return redirect()->back()->with(['success' => 'Falta registrada correctamente']);
     })->name('admin.marcacion.faltas.registro');
 
+    Route::get('marcacion/extras','MarcacionController@extras')->name('admin.marcacion.extras');
+
+
 
     Route::get('reportes/asistencia', 'MarcacionController@asistencia')->name("admin.reporte.asistencia");
-
     Route::get('reportes/asistencia/export', 'MarcacionController@export')->name("admin.reporte.asistencia.export");
-
     Route::get('reportes/asistencia-dia', 'VMarcacionDiaController@index')->name('admin.marcacion.asistenciadia');
     Route::get('reportes/asistencia-dia/export', 'MarcacionController@export2')->name("admin.reporte.asistenciadia.export");
 });
