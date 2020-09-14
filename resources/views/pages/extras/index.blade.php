@@ -36,7 +36,7 @@
             <span class="text-bold" id="totmin">0</span> total minutos extras
         </div>
         <div class="form-group col-md-6">
-            <button class="btn btn-primary btn-block">Guardar</button>
+            <button class="btn btn-primary btn-block btn-disabled" disabled>Guardar</button>
         </div>
     </div>
 
