@@ -14,7 +14,7 @@
         </div>
         <div class="form-group col-md-6">
             <label for="">Seleccion OT</label>
-            <select id class="form-control select2" onchange="buscaOt(this.value)">
+            <select id="ots" class="form-control select2">
                 <option value=""></option>
 
             </select>
@@ -29,21 +29,23 @@
 
         function buscaOt(id) {
             let o = `<option value=""></option>`;
-
+            document.getElementById("ots").innerHTML = "";
             $.ajax({
-                url: "{{route('api.ots_personal2')}}" ,
-                data: "id="+id,
+                url: "{{route('api.ots_personal2')}}",
+                data: "id=" + id,
                 type: 'GET',
-                cache:false,
+                cache: false,
                 success: function (res) {
                     console.log(res)
                     var ots = res.data;
-                    for (let ot of ots){
-                        console.log(ot);
+                    var ox = "";
+                    for (let ot of ots) {
+                        ox = ox + `<option value="${ot.id_ot}">${ot.nro_orden + ' ' + ot.cliente + ' ' + ot.producto_fabricar}</option>`
                     }
+                    document.getElementById("ots").innerHTML = o + ox;
                 },
-                error: function(e){
-                    alert('Error: '+e);
+                error: function (e) {
+                    alert('Error: ' + e);
                 }
             });
         }

@@ -18,9 +18,9 @@
                 <div class="form-group mx-1 col-md-3">
                     <label for="orden">Ordenar por:</label>
                     <select name="orden" id="orden" class="form-control">
-                        <option value="fecha">Fecha</option>
-                        <option value="nro_orden">OT</option>
-                        <option value="apellidos">Nombre Personal</option>
+                        <option value="fecha" @if(request('orden') == 'fecha') selected @endif>Fecha</option>
+                        <option value="nro_orden" @if(request('orden') == 'nro_orden') selected @endif>OT</option>
+                        <option value="nombre" @if(request('orden') == 'nombre') selected @endif>Nombre Personal</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-sm m-1">Buscar</button>
@@ -61,9 +61,10 @@
         function toExcel() {
             var f1 = document.getElementById("f1").value;
             var f2 = document.getElementById("f2").value;
+            var orden = document.getElementById("orden").value;
 
             var route = "{{route('admin.reporte.asistencia.export')}}"
-            window.open(route + '?f1=' + f1 + '&f2=' + f2)
+            window.open(route + '?f1=' + f1 + '&f2=' + f2+'&orden='+orden)
 
         }
     </script>

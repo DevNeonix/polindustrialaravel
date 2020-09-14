@@ -52,6 +52,9 @@ class MarcacionController extends Controller
 
     public function asistencia()
     {
+        $order = \request()->input('orden')??'nombre';
+
+
         if (empty(\request("f1")) || empty(\request("f2"))) {
             $f1 = date("Y-m-d");
             $f2 = new DateTime('+1 day');
@@ -66,7 +69,7 @@ class MarcacionController extends Controller
         $asistencias = \App\VOrdenTrabajoPersonal::join("marcacion", function ($join) {
             $join->on("marcacion.personal", "=", "id_personal");
             $join->on("marcacion.orden_trabajo", "=", "id_ot");
-        })->whereBetween("fecha", [$f1, $f2->format('Y-m-d')])->orderBy('nombre')->get();
+        })->whereBetween("fecha", [$f1, $f2->format('Y-m-d')])->orderBy($order)->get();
 
         return view('pages.reportes.asistencia')->with('data', $asistencias);
     }
