@@ -89,8 +89,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
 
                 //VALIDAR DUPLICADOS DE ASISTENCIAS (RESTRICCION DE 5 MIN)
 
-                $validaMarcacionDoble = \App\Marcacion::where('personal', $personal_item)->where('orden_trabajo', $orden_trabajo)->orderBy("id", "desc")->first();
-                if ($validaMarcacionDoble == null) {
+                $validaMarcacionDoble = \App\Marcacion::where('personal', $personal_item)
+                                        ->where('orden_trabajo', $orden_trabajo)
+                                        ->where('fechaymd', date("Y-m-d"))
+                                        ->count();
+                if ($validaMarcacionDoble == 0 ) {
                     DB::table('marcacion')->insert([
                         "personal" => $personal_item,
                         "orden_trabajo" => $orden_trabajo,
@@ -99,16 +102,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'usuario'], function () {
                     ]);
                 } else {
 
-                    if (\Carbon\Carbon::now()->diffInSeconds($validaMarcacionDoble->fecha) >= 300) {
-                        DB::table('marcacion')->insert([
-                            "personal" => $personal_item,
-                            "orden_trabajo" => $orden_trabajo,
-                            "fecha" => \Carbon\Carbon::now(),
-                            "usuario_registra" => Session::get("usuario"),
-                        ]);
-                    } else {
+                   
                         $errores = $errores . ". La marcación del personal " . $personal_item . " esta duplicada, se ignorará. ";
-                    }
                 }
 
             }
