@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TareoExport;
+use App\VMarcacionDia;
 use DateTime;
 use App\Personal;
 use App\Marcacion;
@@ -53,7 +55,7 @@ class MarcacionController extends Controller
 
     public function asistencia()
     {
-        $order = \request()->input('orden')??'nombre';
+        $order = \request()->input('orden') ?? 'nombre';
 
 
         if (empty(\request("f1")) || empty(\request("f2"))) {
@@ -77,17 +79,45 @@ class MarcacionController extends Controller
 
     public function extras()
     {
-        $personal = Personal::where('tipo','>','-1')->orderBy("apellidos")->get();
+        $personal = Personal::where('tipo', '>', '-1')->orderBy("apellidos")->get();
         return view('pages.extras.index', compact('personal'));
     }
 
-    public function list(Request $request) {
+    public function saveextras(Request $request)
+    {
+        $p = $request->input("personal");
+        $ot = $request->input("ot");
+        $fecha = $request->input("fecha");
+        $totmin = $request->input("totmin");
+
+        $marca = Marcacion::where('personal', $p)->where('orden_trabajo', $ot)->where('fechaymd', $fecha)->first();
+
+        $marca->minutos_extra = $totmin;
+        $marca->save();
+
+
+        return redirect()->route('admin.marcacion.extras')
+            ->with('success', "El registro de las horas extra ha sido almacenado correctamente.");
+
+
+    }
+
+    public function list(Request $request)
+    {
         $personal = $request->input('personal');
         $ot = $request->input('orden_trabajo');
-        
-        $data = Marcacion::selectRaw('distinct LEFT(fecha, 10) as fecha')->where('fecha','>',Carbon::now()->subDays(5))->where('personal',$personal)->where('orden_trabajo',$ot)->get();
+
+        $data = Marcacion::selectRaw('distinct LEFT(fecha, 10) as fecha')->where('fecha', '>', Carbon::now()->subDays(5))->where('personal', $personal)->where('orden_trabajo', $ot)->get();
 
         return response()->json($data);
+
+    }
+
+    public function tareo()
+    {
+//        $marcaciones = VMarcacionDia::limit(100)->get();
+//        return view('pages.reportes.tareo')->with(compact('marcaciones'));
+        return Excel::download(new TareoExport(), 'tareo.xlsx');
 
     }
 
